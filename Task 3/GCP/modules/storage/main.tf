@@ -3,9 +3,12 @@ resource "google_storage_bucket" "uploads" {
   location      = var.region
   force_destroy = true
 
+  versioning {
+    enabled = true
+  }
   lifecycle_rule {
     action { type = "Delete" }
-    condition { age = 90 } # auto-purge old objects
+    condition { num_newer_versions = 1 }
   }
 }
 

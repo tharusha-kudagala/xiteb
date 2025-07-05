@@ -1,7 +1,12 @@
-FROM bitnami/wordpress:latest
+FROM wordpress:php8.2-apache
 
-# Copy wp-content to the correct location in the container
-COPY wp/wp-content /bitnami/wordpress/wp-content
+RUN docker-php-ext-install mysqli
 
-ENV APACHE_HTTP_PORT_NUMBER=8080
+COPY ./wp/wp-content /var/www/html/wp-content
+
+RUN chown -R www-data:www-data /var/www/html/wp-content
+
+ENV PORT=8080
+RUN sed -i "s/80/\${PORT}/" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
+
 EXPOSE 8080

@@ -13,7 +13,6 @@ provider "google" {
   region  = var.region
 }
 
-# Enable mandatory APIs
 resource "google_project_service" "required" {
   for_each = toset([
     "run.googleapis.com",
@@ -23,12 +22,10 @@ resource "google_project_service" "required" {
     "iam.googleapis.com",
     "storage.googleapis.com"
   ])
-  service = each.value
+  service             = each.value
+  disable_on_destroy  = false
 }
 
-# ─────────────────────────────────────────
-# MODULE INVOCATIONS
-# ─────────────────────────────────────────
 module "cloud_sql" {
   source = "./modules/cloud_sql"
   region = var.region
@@ -40,15 +37,12 @@ module "storage" {
   region     = var.region
 }
 
-module "cloud_run" {
-  source                      = "./modules/cloud_run"
-  project_id                  = var.project_id
-  region                      = var.region
-  db_instance_connection_name = module.cloud_sql.connection_name
-  bucket_name                 = module.storage.bucket_name
+output "cloud_sql_public_ip" {
+  description = "Public IP address of the Cloud SQL instance"
+  value       = module.cloud_sql.public_ip_address
+}
 
-  db_user     = module.cloud_sql.db_user
-  db_password = module.cloud_sql.db_password
-  db_name     = module.cloud_sql.db_name
-  image_uri   = var.image_uri
+output "storage_bucket_name" {
+  description = "Name of the storage bucket for uploads"
+  value       = module.storage.bucket_name
 }
