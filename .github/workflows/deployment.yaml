@@ -62,5 +62,10 @@ jobs:
             --region us-central1 \
             --platform managed \
             --project ${{ secrets.GCP_PROJECT_ID }} \
+            --min-instances=0 \
+            --max-instances=10 \
+            --memory=256Mi \
+            --cpu=1 \
+            --concurrency=10 \
             --allow-unauthenticated \
             --set-env-vars "WORDPRESS_DB_HOST=${{ secrets.DB_HOST }},WORDPRESS_DB_NAME=${{ secrets.DB_NAME}},WORDPRESS_DB_USER=${{ secrets.DB_USER }},WORDPRESS_DB_PASSWORD=${{ secrets.DB_PASS }},BUCKET_NAME=${{ secrets.BUCKET_NAME }}"
