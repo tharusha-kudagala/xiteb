@@ -1,7 +1,11 @@
 FROM bitnami/wordpress:latest
 
-# Copy wp-content to the correct location in the container
-# COPY ./wp/wp-content /bitnami/wordpress/wp-content
+# Copy your custom wp-content to a temp folder
+COPY ./wp/wp-content /custom-wp-content
 
-ENV APACHE_HTTP_PORT_NUMBER=8080
-EXPOSE 8080
+# Copy custom entrypoint
+COPY custom-entrypoint.sh /custom-entrypoint.sh
+RUN chmod +x /custom-entrypoint.sh
+
+# Override entrypoint
+ENTRYPOINT ["/custom-entrypoint.sh"]
