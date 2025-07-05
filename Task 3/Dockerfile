@@ -1,11 +1,17 @@
 FROM bitnami/wordpress:latest
 
-# Copy your custom wp-content to a temp folder
+# Copy your custom wp-content to a temporary location
 COPY ./wp/wp-content /custom-wp-content
 
-# Copy custom entrypoint
+# Temporarily switch to root user
+USER root
+
+# Copy the custom entrypoint and make it executable
 COPY custom-entrypoint.sh /custom-entrypoint.sh
 RUN chmod +x /custom-entrypoint.sh
 
-# Override entrypoint
+# Switch back to Bitnami's default non-root user
+USER 1001
+
+# Use the custom entrypoint which injects wp-content at runtime
 ENTRYPOINT ["/custom-entrypoint.sh"]
