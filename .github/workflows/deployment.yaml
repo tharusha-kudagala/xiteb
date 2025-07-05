@@ -49,6 +49,7 @@ jobs:
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-wp \
           --platform managed \
           --region us-central1 \
+          --project=${{ secrets.GCP_PROJECT_ID }} \
           --allow-unauthenticated \
           --add-cloudsql-instances=xiteb-464906:us-central1:wp-sql-instance \
           --set-env-vars "WORDPRESS_DB_HOST=${{ secrets.DB_HOST }},\
