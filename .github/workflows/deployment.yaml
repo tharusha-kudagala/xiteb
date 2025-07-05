@@ -33,7 +33,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/wp-app/wordpress:latest # -f "Task 3/Dockerfile" "Task 3"
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/wp-app/wordpress:latest -f "Task 3/Dockerfile" "Task 3"
 
 
       - name: Push image to Artifact Registry
