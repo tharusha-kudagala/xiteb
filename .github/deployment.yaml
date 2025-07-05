@@ -1,0 +1,47 @@
+name: Deploy WordPress to Cloud Run
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'  # Required for Workload Identity Federation
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud via WIF
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+        service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+    - name: Set up gcloud CLI
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Configure Docker to use Artifact Registry
+      run: |
+        gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+
+    - name: Build Docker image with custom wp-content
+      run: |
+        cd "Task 3"
+        docker build -t ${{ secrets.GCP_IMAGE_URI }} .
+
+    - name: Push Docker image
+      run: |
+        docker push ${{ secrets.GCP_IMAGE_URI }}
+
+    - name: Deploy using Terraform
+      run: |
+        cd "Task 3/terraform"
+        terraform init
+        terraform apply -auto-approve -var="image_uri=${{ secrets.GCP_IMAGE_URI }}"
