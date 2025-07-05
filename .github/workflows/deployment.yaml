@@ -33,7 +33,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/wp-app/wordpress:latest -f "Task 3/Dockerfile" "Task 3"
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/wp-app/wordpress:latest # -f "Task 3/Dockerfile" "Task 3"
 
 
       - name: Push image to Artifact Registry
@@ -42,20 +42,3 @@ jobs:
 
       - name: Set IMAGE_URI env variable
         run: echo "IMAGE_URI=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/wp-app/wordpress:latest" >> $GITHUB_ENV
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.6.6
-
-      - name: Terraform Init
-        working-directory: "./Task 3/GCP"
-        run: terraform init
-
-      - name: Terraform Plan
-        working-directory: "./Task 3/GCP"
-        run: terraform plan -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="image_uri=$IMAGE_URI"
-
-      - name: Terraform Apply
-        working-directory: "./Task 3/GCP"
-        run: terraform apply -auto-approve -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="image_uri=$IMAGE_URI"
