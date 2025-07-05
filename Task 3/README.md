@@ -64,3 +64,5 @@ gcloud run deploy wp-cloudrun   --image us-central1-docker.pkg.dev/<PROJECT_ID>/
 ---
 
 **Built for Task 3 - GCP DevOps Practical by [Tharusha Kudagala]**
+
+Thank You
