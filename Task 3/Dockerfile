@@ -14,7 +14,10 @@
 
 FROM php:8.1-apache
 
-# Tell Apache to listen on port 8080
+# Install MySQLi extension
+RUN docker-php-ext-install mysqli
+
+# Configure Apache to listen on port 8080 (Cloud Run default)
 ENV APACHE_LISTEN_PORT=8080
 RUN sed -i 's/80/${APACHE_LISTEN_PORT}/g' /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
 
