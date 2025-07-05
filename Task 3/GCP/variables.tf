@@ -13,3 +13,19 @@ variable "image_uri" {
   description = "Artifact Registry container image URI"
   type        = string
 }
+
+variable "db_user" {
+  type = string
+  description = "Database User"
+}
+
+variable "db_password" {
+  type = string
+  description = "Database Password"
+  sensitive = true
+}
+
+variable "db" {
+  type = string
+  description = "Database Name"
+}

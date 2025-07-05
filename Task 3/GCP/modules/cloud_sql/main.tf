@@ -17,16 +17,16 @@ resource "google_sql_database_instance" "wordpress" {
 }
 
 resource "google_sql_database" "wordpress" {
-  name     = "wordpress"
+  name     = var.db
   instance = google_sql_database_instance.wordpress.name
   charset  = "utf8"
   collation = "utf8_general_ci"
 }
 
 resource "google_sql_user" "wordpress" {
-  name     = "wp_user"
+  name     = var.db_user
   instance = google_sql_database_instance.wordpress.name
-  password = "bDlBh3ItC2wHzEL"
+  password = var.db_password
 }
 
 output "connection_name" {

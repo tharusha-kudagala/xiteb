@@ -22,19 +22,29 @@ resource "google_project_service" "required" {
     "iam.googleapis.com",
     "storage.googleapis.com"
   ])
-  service             = each.value
-  disable_on_destroy  = false
+  service            = each.value
+  disable_on_destroy = false
 }
 
 module "cloud_sql" {
-  source = "./modules/cloud_sql"
-  region = var.region
+  source      = "./modules/cloud_sql"
+  region      = var.region
+  db          = var.db
+  db_user     = var.db_user
+  db_password = var.db_password
 }
 
 module "storage" {
   source     = "./modules/storage"
   project_id = var.project_id
   region     = var.region
+}
+
+resource "google_artifact_registry_repository" "wp_app" {
+  location = var.region
+  repository_id = "wp-app"
+  format = "DOCKER"
+  description = "Docker repository for wordpress app"
 }
 
 output "cloud_sql_public_ip" {
