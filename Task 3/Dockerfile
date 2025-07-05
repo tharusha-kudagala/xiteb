@@ -1,17 +1,13 @@
-FROM bitnami/wordpress:latest
+FROM wordpress:php8.2-apache
 
-# Copy your custom wp-content to a temporary location
-COPY ./wp/wp-content /custom-wp-content
+# Copy custom wp-content if you have one
+COPY ./wp/wp-content /var/www/html/wp-content
 
-# Temporarily switch to root user
-USER root
+# Allow WordPress to read/write (optional if wp-content has strict perms)
+RUN chown -R www-data:www-data /var/www/html/wp-content
 
-# Copy the custom entrypoint and make it executable
-COPY custom-entrypoint.sh /custom-entrypoint.sh
-RUN chmod +x /custom-entrypoint.sh
+# Cloud Run uses port 8080
+ENV PORT=8080
+RUN sed -i "s/80/\${PORT}/" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
 
-# Switch back to Bitnami's default non-root user
-USER 1001
-
-# Use the custom entrypoint which injects wp-content at runtime
-ENTRYPOINT ["/custom-entrypoint.sh"]
+EXPOSE 8080
