@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-2" # Free-tier quota friendly
+  region = "us-east-2"
 }
 
 # 1) Networking
@@ -201,14 +201,14 @@ resource "aws_db_instance" "mysql" {
   identifier             = "wp-db"
   engine                 = "mysql"
   engine_version         = "8.0"
-  instance_class         = "db.t3.micro" # free-tier
-  allocated_storage      = 20
+  instance_class         = "db.t3.micro"
+  allocated_storage      = 30
   db_name                = "wordpress"
   username               = "admin"
   password               = var.db_password
   multi_az               = false
   skip_final_snapshot    = true
-  publicly_accessible    = false # critical
+  publicly_accessible    = false
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.db_subnets.name
 
@@ -220,9 +220,9 @@ resource "aws_db_instance" "mysql" {
 
 # 4) EC2 WordPress  
 resource "aws_instance" "wordpress" {
-  ami                    = "ami-0d1b5a8c13042c939" # Ubuntu 24.04 LTS
+  ami                    = "ami-0d1b5a8c13042c939"
   instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.public.id # needs internet
+  subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   key_name               = var.key_name
 
