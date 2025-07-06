@@ -62,6 +62,11 @@ resource "google_sql_database_instance" "mysql" {
       private_network = google_compute_network.vpc.id
     }
     backup_configuration { enabled = true }
+    # Labels for Cloud SQL instance
+    user_labels = {
+      environment = "exam"
+      name        = "wp-sql"
+    }
   }
 
   # avoid destroy ordering issue on private_network
@@ -84,7 +89,6 @@ resource "google_sql_user" "root_user" {
   instance = google_sql_database_instance.mysql.name
 }
 
-
 # 4. Compute Engine VM  (WordPress on f1-micro)
 resource "google_compute_instance" "wordpress" {
   name         = "wordpress-vm"
@@ -98,7 +102,7 @@ resource "google_compute_instance" "wordpress" {
 
   network_interface {
     subnetwork   = google_compute_subnetwork.public.id
-    access_config {}                             # external IP
+    access_config {}
   }
 
   metadata_startup_script = <<-EOT
@@ -146,11 +150,6 @@ resource "google_compute_firewall" "allow_http" {
     protocol = "tcp"
     ports    = ["80"]
   }
-
-  labels = {
-    environment = "exam"
-    name        = "allow-http"
-  }
 }
 
 # b) Allow VM → CloudSQL (private range) on port 3306
@@ -159,15 +158,10 @@ resource "google_compute_firewall" "allow_sql_egress" {
   network = google_compute_network.vpc.name
   direction = "EGRESS"
   priority  = 1000
-  destination_ranges = ["172.18.0.0/16"]     # same /16 allocated above
+  destination_ranges = ["172.18.0.0/16"]
   allow {
     protocol = "tcp"
     ports    = ["3306"]
   }
   target_tags = ["wordpress-vm"]
-
-  labels = {
-    environment = "exam"
-    name        = "allow-sql-egress"
-  }
 }
