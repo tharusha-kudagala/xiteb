@@ -5,7 +5,9 @@ This repository contains Terraform configurations to deploy a highly-available W
 ## Structure
 
 - `Task 1/AWS/` — AWS infrastructure (VPC, subnets, EC2, RDS, ALB)
+[Watch Demo on Google Drive](https://drive.google.com/file/d/1K4NuWXlgigje9rzp4P7X8UutlVW23Hqt/view?usp=share_link)
 - `Task 1/GCP/` — GCP infrastructure (VPC, subnets, Compute Engine, Cloud SQL)
+[Watch Demo on Google Drive](https://drive.google.com/file/d/1Otp-Nm19v4qG3rH_irhaBfKzMidQK_9U/view?usp=share_link)
 
 ---
 
