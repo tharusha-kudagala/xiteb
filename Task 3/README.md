@@ -1,5 +1,11 @@
 # 🚀 WordPress Docker Image – Task 3 (Cloud Run + Cloud SQL)
 
+[Watch Demo on Google Drive](https://drive.google.com/file/d/17IjQH6o3OfbLawYzM-uQXZnJTFnjPVs3/view?usp=share_link)
+
+## 🔧 Configurations to do after terraform applied
+
+- ☁️ The terraform will provide the host link for **Google Cloud SQL**, please note that to **edit** it in the **repository secrets DB_HOST**
+
 This Dockerfile builds a custom WordPress image tailored for deployment on **Google Cloud Run**, integrating with infrastructure provisioned in **Task 3** (Cloud SQL and optionally Cloud Storage via Terraform).
 
 ---
@@ -31,9 +37,7 @@ Ensure the following structure:
 
 ## 🛠️ Build Instructions
 
-```bash
-docker build -t my-wordpress:latest .
-```
+After pushing the changes to **main** branch in GitHub, it will **automatically build, push and deploy** to the container registry and cloud run using **GitHub Actions**
 
 ---
 
@@ -58,11 +62,9 @@ gcloud run deploy wp-cloudrun   --image us-central1-docker.pkg.dev/<PROJECT_ID>/
 
 ## 🔒 Security Tips
 
-- Never hard-code credentials. Use secrets manager or CI/CD environment variables.
+- Never hard-code credentials. Use secrets manager or CI/CD environment variables in production.
 - Remove `0.0.0.0/0` from SQL authorized networks in production.
 
 ---
 
 **Built for Task 3 - GCP DevOps Practical by [Tharusha Kudagala]**
-
-Thank You
