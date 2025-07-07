@@ -4,7 +4,26 @@
 This guide provides step-by-step instructions for deploying WordPress on managed Kubernetes services across **Google Cloud (GKE)**, **Azure (AKS)**, and **AWS (EKS)** using **Helm** for simplified installation.
 
 ---
+### My preference is Google Kubernetes Engine
 
+[Watch Demo on Google Drive](https://drive.google.com/file/d/1DAd6z-dsDaMUZn43fjXTxdVNsrnizXpq/view?usp=share_link)
+
+**GKE Autopilot Free Tier** gives:
+
+- ✅ 1 **free zonal Autopilot cluster** per billing account.
+- ✅ **No charge** for control plane or cluster management.
+- ✅ **Free 30 pods/month** with **0.25 vCPU** and **0.5 GB memory** per pod.
+
+**Result:** We can run small workloads **completely for free**, ideal for testing, development, or personal projects.
+
+---
+
+**EKS and AKS free tiers are more limited:**
+
+- ❌ **EKS**: We pay **$0.10/hour for the control plane** (~$72/month), even if we use spot instances.
+- ⚠️ **AKS**: Control plane is free, **but no free node resources** are included; we still pay for the VMs.
+
+---
 ## Google Kubernetes Engine (GKE)
 
 ### 1. Create an Autopilot Cluster
@@ -22,7 +41,7 @@ kubectl version --client
 
 > **Autopilot Mode Notes:**
 > - Nodes are dynamically created only when pods are deployed.
-> - `kubectl get nodes` will return empty until you deploy workloads.
+> - `kubectl get nodes` will return empty until we deploy workloads.
 
 ### 3. Install Helm
 ```sh
@@ -95,7 +114,7 @@ az aks nodepool scale \
 
 > **Note on Free Tier Usage:**
 > - Azure often restricts very small SKUs like `Standard_B1s` for AKS workloads.
-> - If you see a message like:
+> - If we see a message like:
 >   *"The VM SKUs chosen for agentpool(s) `userpool` are restricted by AKS..."*  
 >   Refer to the [AKS restricted SKUs list](https://aka.ms/aks/restricted-skus).
 
